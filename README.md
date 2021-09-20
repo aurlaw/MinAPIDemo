@@ -2,9 +2,13 @@
 
 .NET 6 and Minimal API demo
 
-TODO
 
+## Running
 
+```
+dotnet restore
+dotnet run --project MinAPIDemo/MinAPIDemo.csproj
+```
 
 
 ## Entity Migrations

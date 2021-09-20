@@ -12,8 +12,6 @@ namespace MinAPIDemo.Repositories
         private readonly IDbContextFactory<EfContext> _dbContext;
         private readonly IMapper _mapper;
         
-        // private readonly Dictionary<Guid, Product> _list = new();
-
         public ProductRespository(IDbContextFactory<EfContext> dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
@@ -28,25 +26,26 @@ namespace MinAPIDemo.Repositories
                 await using var dbContext = _dbContext.CreateDbContext();
                 await dbContext.Products.AddAsync(entity);
                 await dbContext.SaveChangesAsync();
-                // _list.Add(product.Id, product);
             }
         }
         
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             await using var dbContext = _dbContext.CreateDbContext();
-            return dbContext.Products.ProjectToQueryable<Product>().AsEnumerable();
-
-            // return Task.FromResult(_list.Values.AsEnumerable());
+            var results = dbContext.Products.AsEnumerable();
+            if(results.Any()) 
+            {
+                return _mapper.Map<IEnumerable<Product>>(results);
+            }
+            return Enumerable.Empty<Product>();
         }
         
         public async Task<Product?> GetByIdAsync(Guid id)
         {
             await using var dbContext = _dbContext.CreateDbContext();
-            return await dbContext.Products.AsQueryable()
-                .Where(p => p.Id == id.ToString())
-                .ProjectToFirstOrDefaultAsync<Product>();
-            // return Task.FromResult(_list.GetValueOrDefault(id));
+            var result = await dbContext.Products.AsQueryable()
+                .FirstOrDefaultAsync(p => p.Id == id.ToString());
+            return _mapper.Map<Product>(result);
         }
         
         public async Task UpdateAsync(Product? product)
@@ -56,8 +55,7 @@ namespace MinAPIDemo.Repositories
                 var entity = _mapper.Map<ProductEntity>(product);
                 await using var dbContext = _dbContext.CreateDbContext();
                 var existingProduct = await dbContext.Products.AsQueryable()
-                    .Where(p => p.Id == entity.Id)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(p => p.Id == entity.Id);
                 if(existingProduct is not null) 
                 {
                     existingProduct.Name = product.Name;
@@ -75,8 +73,7 @@ namespace MinAPIDemo.Repositories
         {
             await using var dbContext = _dbContext.CreateDbContext();
             var existingProduct = await dbContext.Products.AsQueryable()
-                .Where(p => p.Id == id.ToString())
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.Id == id.ToString());
             if(existingProduct is not null) 
             {
                 dbContext.Remove(existingProduct);
