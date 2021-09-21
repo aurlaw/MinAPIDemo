@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MinAPIDemo;
 using MinAPIDemo.Common;
 using MinAPIDemo.Data;
 using MinAPIDemo.Models;
@@ -18,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Minimal API", Version = "v1" });    
 });
+builder.Services.AddJwtAuthService(builder.Configuration);
 builder.Services.AddEndpointDefinitions(typeof(Product));
 
 
@@ -27,6 +29,9 @@ app.UseSwagger();
 app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minimal API V1");
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpointDefinitions();
 app.MapGet("/", () => "Hello World!");
