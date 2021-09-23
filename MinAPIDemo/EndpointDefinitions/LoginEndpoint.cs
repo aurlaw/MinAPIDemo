@@ -10,9 +10,10 @@ namespace MinAPIDemo.EndpointDefinitions
         {
             app.MapPost("/login", async(ILoginService loginService, LoginRequest loginRequest) => 
             {
-                if(await loginService.LoginAsync(loginRequest))
+                var result = await loginService.LoginAsync(loginRequest);
+                if(result.Item1)
                 {
-                    var jwtResponse = await loginService.GenerateTokenAsync(loginRequest);
+                    var jwtResponse = await loginService.GenerateTokenAsync(result.Item2!);
                     return Results.Ok(jwtResponse);
                 } 
                 else 

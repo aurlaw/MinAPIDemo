@@ -4,7 +4,9 @@ using System.Security.Principal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MinAPIDemo.Models;
+using MinAPIDemo.Models.Domain;
 using MinAPIDemo.Models.Security;
+using MinAPIDemo.Repositories;
 
 namespace MinAPIDemo.Services
 {
@@ -13,22 +15,23 @@ namespace MinAPIDemo.Services
         private readonly JwtTokenOptions _options;
         private readonly SigningCredentials _signingCredentials;
         private readonly TimeSpan _tokenExpiration;
-        
-        public LoginService(IOptions<JwtTokenOptions> options)
+        private readonly IUserRepository _userRepository;
+        public LoginService(IOptions<JwtTokenOptions> options, IUserRepository userRepository)
         {
             _options = options.Value;
-            _signingCredentials = new SigningCredentials(JwtTokenOptions.CreateKey(_options.SecretKey), 
+            _signingCredentials = new SigningCredentials(JwtTokenOptions.CreateKey(_options.SecretKey),
                 SecurityAlgorithms.HmacSha256);
             _tokenExpiration = TimeSpan.FromMinutes(_options.TokenExpiryMins);
+            _userRepository = userRepository;
         }
 
-        public Task<LoginResponse> GenerateTokenAsync(LoginRequest request)
+        public async Task<LoginResponse> GenerateTokenAsync(UserEntity user)
         {
             var handler = new JwtSecurityTokenHandler();
             var newTokenExpiration = DateTime.UtcNow.Add(_tokenExpiration);
             var identity = new ClaimsIdentity(
-                new GenericIdentity(request.Username, "TokenAuth"),
-                new[] {new Claim("ID", Guid.NewGuid().ToString())}
+                new GenericIdentity(user.Username, "TokenAuth"),
+                new[] {new Claim("ID", user.Id)}
             );
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
                 {
@@ -40,21 +43,21 @@ namespace MinAPIDemo.Services
                 }
             );
             var encodedToken = handler.WriteToken(securityToken);
-            // Update token data on database: TODO
+            // Update token data on database
+            await _userRepository.UpdateUserToken(user.Id, encodedToken, newTokenExpiration);
             var response = new LoginResponse
             {
-                Username = request.Username,
+                Username = user.Username,
                 Token = encodedToken,
                 Expiration = (int)_tokenExpiration.TotalSeconds
             };
-            return Task.FromResult(response);
+            return response;
         }
 
-        public Task<bool> LoginAsync(LoginRequest request)
+        public async Task<Tuple<bool, UserEntity?>>  LoginAsync(LoginRequest request)
         {
-            return Task.FromResult(
-                request.Username == "username" && request.Password == "password"
-            );
+            var user = await _userRepository.GetUserByLoginAsync(request.Username, request.Password);
+            return new Tuple<bool, UserEntity?>(user is not null, user);
         }
     }
 }

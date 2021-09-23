@@ -10,5 +10,6 @@ namespace MinAPIDemo.Data
 
         }
         public DbSet<ProductEntity> Products {get;set;} = default!;
+        public DbSet<UserEntity> Users {get;set;} = default!;
     }
 }

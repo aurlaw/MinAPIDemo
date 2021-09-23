@@ -17,4 +17,3 @@ dotnet run --project MinAPIDemo/MinAPIDemo.csproj
 dotnet ef migrations add MIGRATION_NAME -c EfContext -o Data/Migrations --project MinAPIDemo/MinAPIDemo.csproj
 dotnet ef database update --project MinAPIDemo/MinAPIDemo.csproj
 ```
-
