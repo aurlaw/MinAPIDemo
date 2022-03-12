@@ -19,9 +19,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Minimal API", Version = "v1" });    
 });
-builder.Services.AddJwtAuthService(builder.Configuration);
+// builder.Services.AddJwtAuthService(builder.Configuration);
 builder.Services.AddEndpointDefinitions(typeof(Product));
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000");
+        });
+});
 
 var app = builder.Build();
 // configure
@@ -29,9 +37,9 @@ app.UseSwagger();
 app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minimal API V1");
 });
-
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseCors();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.UseEndpointDefinitions();
 app.MapGet("/", () => "Hello World!");

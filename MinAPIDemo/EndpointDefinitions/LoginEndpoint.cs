@@ -1,6 +1,7 @@
 using MinAPIDemo.Common;
 using MinAPIDemo.Models.Security;
 using MinAPIDemo.Services;
+using MinAPIDemo.Repositories;
 
 namespace MinAPIDemo.EndpointDefinitions
 {
@@ -25,6 +26,7 @@ namespace MinAPIDemo.EndpointDefinitions
 
         public void DefineServices(IServiceCollection services)
         {
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddTransient<ILoginService, LoginService>();
         }
     }
