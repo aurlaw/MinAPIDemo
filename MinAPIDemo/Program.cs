@@ -42,7 +42,7 @@ app.UseCors();
 // app.UseAuthorization();
 
 app.UseEndpointDefinitions();
-app.MapGet("/", () => "Hello World!");
+// app.MapGet("/", () => "Hello World!");
 
 app.Run();
 

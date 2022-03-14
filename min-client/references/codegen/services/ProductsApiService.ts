@@ -1,31 +1,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { LoginRequest } from '../models/LoginRequest';
 import type { Product } from '../models/Product';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
-
-    /**
-     * @returns any Success
-     * @throws ApiError
-     */
-    public static postLogin({
-        requestBody,
-    }: {
-        requestBody: LoginRequest,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/login',
-            body: requestBody,
-            mediaType: 'application/json',
-        });
-    }
+export class ProductsApiService {
 
     /**
      * @returns Product Success
@@ -42,7 +24,7 @@ export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
      * @returns any Success
      * @throws ApiError
      */
-    public static postProducts({
+    public static createProduct({
         requestBody,
     }: {
         requestBody: Product,
@@ -59,7 +41,7 @@ export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
      * @returns any Success
      * @throws ApiError
      */
-    public static getProducts1({
+    public static getProductById({
         id,
     }: {
         id: string,
@@ -77,7 +59,7 @@ export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
      * @returns any Success
      * @throws ApiError
      */
-    public static putProducts({
+    public static updateProduct({
         id,
         requestBody,
     }: {
@@ -99,7 +81,7 @@ export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
      * @returns any Success
      * @throws ApiError
      */
-    public static deleteProducts({
+    public static deleteProduct({
         id,
     }: {
         id: string,
@@ -110,17 +92,6 @@ export class MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService {
             path: {
                 'id': id,
             },
-        });
-    }
-
-    /**
-     * @returns string Success
-     * @throws ApiError
-     */
-    public static get(): CancelablePromise<string> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/',
         });
     }
 

@@ -6,7 +6,8 @@ paths:
   /login:
     post:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - AuthAPI
+      operationId: Login
       requestBody:
         content:
           application/json:
@@ -19,7 +20,8 @@ paths:
   /products:
     get:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - ProductsAPI
+      operationId: GetProducts
       responses:
         '200':
           description: Success
@@ -31,7 +33,8 @@ paths:
                   $ref: '#/components/schemas/Product'
     post:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - ProductsAPI
+      operationId: CreateProduct
       requestBody:
         content:
           application/json:
@@ -44,7 +47,8 @@ paths:
   '/products/{id}':
     get:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - ProductsAPI
+      operationId: GetProductById
       parameters:
         - name: id
           in: path
@@ -56,7 +60,8 @@ paths:
           description: Success
     put:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - ProductsAPI
+      operationId: UpdateProduct
       parameters:
         - name: id
           in: path
@@ -74,7 +79,8 @@ paths:
           description: Success
     delete:
       tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+        - ProductsAPI
+      operationId: DeleteProduct
       parameters:
         - name: id
           in: path
@@ -84,17 +90,6 @@ paths:
       responses:
         '200':
           description: Success
-  /:
-    get:
-      tags:
-        - 'MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-      responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
 components:
   schemas:
     LoginRequest:

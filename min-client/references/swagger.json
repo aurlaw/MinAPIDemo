@@ -8,8 +8,9 @@
     "/login": {
       "post": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "AuthAPI"
         ],
+        "operationId": "Login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -30,8 +31,9 @@
     "/products": {
       "get": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "ProductsAPI"
         ],
+        "operationId": "GetProducts",
         "responses": {
           "200": {
             "description": "Success",
@@ -50,8 +52,9 @@
       },
       "post": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "ProductsAPI"
         ],
+        "operationId": "CreateProduct",
         "requestBody": {
           "content": {
             "application/json": {
@@ -72,8 +75,9 @@
     "/products/{id}": {
       "get": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "ProductsAPI"
         ],
+        "operationId": "GetProductById",
         "parameters": [
           {
             "name": "id",
@@ -92,8 +96,9 @@
       },
       "put": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "ProductsAPI"
         ],
+        "operationId": "UpdateProduct",
         "parameters": [
           {
             "name": "id",
@@ -122,8 +127,9 @@
       },
       "delete": {
         "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+          "ProductsAPI"
         ],
+        "operationId": "DeleteProduct",
         "parameters": [
           {
             "name": "id",
@@ -137,25 +143,6 @@
         "responses": {
           "200": {
             "description": "Success"
-          }
-        }
-      }
-    },
-    "/": {
-      "get": {
-        "tags": [
-          "MinAPIDemo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }

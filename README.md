@@ -40,9 +40,3 @@ dotnet ef database update --project MinAPIDemo/MinAPIDemo.csproj
   npm run dev
 ```
 
-yarn add --dev openapi-typescript-codegen
-{
-  "scripts": {
-    "codegen": "cd ../MinAPIDemo && dotnet build && cd ../min-client && yarn openapi --input references/swagger.json --output references/codegen --client axios --postfix Service --useOptions --useUnionTypes"
-  }
-}

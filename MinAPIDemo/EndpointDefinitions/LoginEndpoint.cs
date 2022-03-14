@@ -21,7 +21,8 @@ namespace MinAPIDemo.EndpointDefinitions
                 {
                     return Results.BadRequest("Username and/or password is invalid");
                 }
-            });
+            })
+                .WithName("Login").WithTags("AuthAPI");
         }
 
         public void DefineServices(IServiceCollection services)

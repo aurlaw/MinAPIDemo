@@ -8,17 +8,21 @@ namespace MinAPIDemo.EndpointDefinitions
     {
         public void DefineEndpoints(WebApplication app)
         {
-            app.MapGet("/products", async(IProductRespository respository) => await respository.GetAllAsync());
+            
+            app.MapGet("/products", async(IProductRespository respository) => await respository.GetAllAsync())
+                .WithName("GetProducts").WithTags("ProductsAPI");
             app.MapGet("/products/{id}", async(IProductRespository respository, Guid id) => 
             {
                 var product = await respository.GetByIdAsync(id);    
                 return product is not null ? Results.Ok(product) : Results.NotFound();          
-            });
+            })
+                .WithName("GetProductById").WithTags("ProductsAPI");
             app.MapPost("/products", async(IProductRespository respository, Product product ) =>  
             {
                 await respository.CreateAsync(product);
                 return Results.Created($"/products/{product.Id}", product);
-            });
+            })
+                .WithName("CreateProduct").WithTags("ProductsAPI");
             app.MapPut("/products/{id}", async(IProductRespository respository, Guid id, Product updatedProduct) => 
             {
                 if(updatedProduct.Id != id)
@@ -32,12 +36,14 @@ namespace MinAPIDemo.EndpointDefinitions
                 }
                 await respository.UpdateAsync(updatedProduct);
                 return Results.Ok(updatedProduct);
-            });
+            })
+                .WithName("UpdateProduct").WithTags("ProductsAPI");
             app.MapDelete("/products/{id}", async(IProductRespository respository, Guid id) => 
             {
                 await respository.DeleteAsync(id);
                 return Results.Ok();
-            });
+            })
+                .WithName("DeleteProduct").WithTags("ProductsAPI");
         }
 
         public void DefineServices(IServiceCollection services)

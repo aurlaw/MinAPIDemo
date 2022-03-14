@@ -9,4 +9,5 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { LoginRequest } from './models/LoginRequest';
 export type { Product } from './models/Product';
 
-export { MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService } from './services/MinApiDemoVersion1000CultureNeutralPublicKeyTokenNullService';
+export { AuthApiService } from './services/AuthApiService';
+export { ProductsApiService } from './services/ProductsApiService';
