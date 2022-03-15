@@ -1,68 +1,48 @@
-import { useState, useEffect } from 'react'
-import { QueryClient, QueryClientProvider, useQueryClient } from "react-query";
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-
 import logo from './logo.svg'
+import ProductCounter from './components/ProductCounter'
+import Products from './components/Products'
+import ProductItem from "./components/ProductItem"
+
 import './App.css'
 
 import {OpenAPI} from '../references/codegen/index';
-import {useProducts, useProductsCount} from './hooks/useProducts';
 
 const queryClient = new QueryClient();
 
-
 OpenAPI.BASE = "https://localhost:7219"; // Set this to match your local API endpoint.
 
-function App() {
+export default function App() {
+  const [productId, setProductId] = useState('');
+
+  const onProductChange = (id: string) => {
+    setProductId(id)
+  }; 
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Total Products: <ProductCounter />
-          </p>
-          <Products />
-
-        </header>
+          <header className="App-header">
+            <h1>Minimal API Demo</h1>
+              <img src={logo} className="App-logo" alt="logo" />
+              <p>
+                  Total Products: <ProductCounter />
+              </p>
+              <main>
+                <article>
+                  <Products setProductId={onProductChange} />
+                   <aside>
+                     {productId === '' ? 
+                      (<div>N/A</div>) :
+                      (<ProductItem productId={productId}/>)}
+                   </aside>
+                </article>
+              </main>
+          </header>
       </div>
       <ReactQueryDevtools />
     </QueryClientProvider>
   )
 }
-
-function ProductCounter() {
-  const productCountQuery = useProductsCount();
-  return (
-    <>
-      {productCountQuery.data ?? 0}
-    </>
-  );
-}
-
-function Products() {
-  const { status, data, error, isFetching } = useProducts();
-  return(
-    <div>
-      {status === "loading" ? (
-        "loading..."
-      ) : status === "error" ? (
-        <span>Error: {error.message}</span>
-      ) : (
-        <>
-          {data?.map((product) => (
-            <div key={product.id}>
-              {product.name} - ${product.price}
-            </div>
-          ))}
-            <div>{isFetching ? "Background Updating..." : " "}</div>
-
-        </>
-      )}
-    </div>
-  );
-
-}
-
-export default App

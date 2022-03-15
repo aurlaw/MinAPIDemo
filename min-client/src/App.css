@@ -40,3 +40,38 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+main {
+  width: 70%;
+}
+article {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+.products {
+  text-align: right;
+}
+aside {
+  text-align: left;
+  padding: 1rem;
+  background-color: #61dafbcc;
+  color: #282c34;
+
+}
+a:hover {
+  cursor: pointer;
+}
+.product-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem;
+}
+.product-item:hover {
+  background-color: #61dafb;
+  color: #282c34;
+}
+.product-item span {
+  display: inline-block;
+}
