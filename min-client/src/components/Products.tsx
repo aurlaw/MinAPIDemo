@@ -1,3 +1,4 @@
+// import  from "react-query";
 import {useProducts} from '../hooks/useProducts';
 
 type AppProps = {
@@ -6,6 +7,7 @@ type AppProps = {
 
 export default function Products({setProductId}: AppProps) {
     const { isFetching, ...queryInfo } = useProducts();
+
     return(
       <div className="products">
       {queryInfo.isLoading ? (
@@ -17,10 +19,11 @@ export default function Products({setProductId}: AppProps) {
           {queryInfo.data?.map((product) => (
               <a key={product.id} className="product-item" onClick={() => setProductId(product.id!)}>
                 <span>{product.name}</span>
+                <span>{product.quantity}</span>
                 <span>${product.price}</span>
               </a>
           ))}
-            <div>{isFetching ? "Background Updating..." : " "}</div>
+            {isFetching ? "Background Updating..." : " "}
         </>
       )}
       </div>

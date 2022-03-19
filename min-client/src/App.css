@@ -62,16 +62,57 @@ aside {
 a:hover {
   cursor: pointer;
 }
+.products {
+  border: 1px solid #61dafb;
+}
 .product-item {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 3fr 1fr 2fr;
+  gap: 1rem;
   padding: 0.25rem;
 }
+.product-item:nth-child(even) {
+  background-color: #5b6272;
+}
+.product-item span {
+  padding: 0.25rem 0.75rem;
+}
+.product-item span:first-of-type {
+  justify-self: start;
+}
+
 .product-item:hover {
   background-color: #61dafb;
   color: #282c34;
 }
 .product-item span {
   display: inline-block;
+}
+label {
+  font-size: 0.9rem;
+}
+label input {
+  display: block;
+  border: 1px solid #000;
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.btn {
+  border: 1px solid #5b6272;
+  background-color: #5b6272;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 25px;
+  min-width: 80px;
+  cursor: pointer;
+}
+.btn:hover {
+  border: 1px solid #282c34;
+  background-color: #282c34;
+
 }

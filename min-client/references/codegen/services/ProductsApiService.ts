@@ -21,7 +21,7 @@ export class ProductsApiService {
     }
 
     /**
-     * @returns any Success
+     * @returns any Created
      * @throws ApiError
      */
     public static createProduct({
@@ -38,25 +38,28 @@ export class ProductsApiService {
     }
 
     /**
-     * @returns any Success
+     * @returns Product Success
      * @throws ApiError
      */
     public static getProductById({
         id,
     }: {
         id: string,
-    }): CancelablePromise<any> {
+    }): CancelablePromise<Product> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/products/{id}',
             path: {
                 'id': id,
             },
+            errors: {
+                404: `Not Found`,
+            },
         });
     }
 
     /**
-     * @returns any Success
+     * @returns Product Success
      * @throws ApiError
      */
     public static updateProduct({
@@ -65,7 +68,7 @@ export class ProductsApiService {
     }: {
         id: string,
         requestBody: Product,
-    }): CancelablePromise<any> {
+    }): CancelablePromise<Product> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/products/{id}',
@@ -74,6 +77,10 @@ export class ProductsApiService {
             },
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                404: `Not Found`,
+                409: `Conflict`,
+            },
         });
     }
 

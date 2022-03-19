@@ -17,6 +17,16 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /products:
     get:
       tags:
@@ -42,8 +52,8 @@ paths:
               $ref: '#/components/schemas/Product'
         required: true
       responses:
-        '200':
-          description: Success
+        '201':
+          description: Created
   '/products/{id}':
     get:
       tags:
@@ -58,6 +68,16 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
     put:
       tags:
         - ProductsAPI
@@ -77,6 +97,22 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '409':
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HttpValidationProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
     delete:
       tags:
         - ProductsAPI
@@ -92,6 +128,34 @@ paths:
           description: Success
 components:
   schemas:
+    HttpValidationProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          nullable: true
+          readOnly: true
+      additionalProperties: { }
     LoginRequest:
       type: object
       properties:
@@ -102,6 +166,39 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    LoginResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        token:
+          type: string
+          nullable: true
+        expiration:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: { }
     Product:
       type: object
       properties:

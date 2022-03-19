@@ -5,6 +5,7 @@ import logo from './logo.svg'
 import ProductCounter from './components/ProductCounter'
 import Products from './components/Products'
 import ProductItem from "./components/ProductItem"
+import ProductAdd from "./components/ProductAdd"
 
 import './App.css'
 
@@ -37,6 +38,8 @@ export default function App() {
                      {productId === '' ? 
                       (<div>N/A</div>) :
                       (<ProductItem productId={productId}/>)}
+                      <hr/>
+                      <ProductAdd />
                    </aside>
                 </article>
               </main>

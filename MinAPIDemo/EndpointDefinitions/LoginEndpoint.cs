@@ -2,6 +2,7 @@ using MinAPIDemo.Common;
 using MinAPIDemo.Models.Security;
 using MinAPIDemo.Services;
 using MinAPIDemo.Repositories;
+using System.Net;
 
 namespace MinAPIDemo.EndpointDefinitions
 {
@@ -22,6 +23,9 @@ namespace MinAPIDemo.EndpointDefinitions
                     return Results.BadRequest("Username and/or password is invalid");
                 }
             })
+                .Accepts<LoginRequest>("application/json")
+                .Produces<LoginResponse>(200)
+                .ProducesProblem(400)
                 .WithName("Login").WithTags("AuthAPI");
         }
 
