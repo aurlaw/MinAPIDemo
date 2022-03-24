@@ -1,13 +1,13 @@
-using MinAPIDemo.Models;
+using MinAPIDemo.Models.Domain;
 
 namespace MinAPIDemo.Repositories
 {
     public interface IProductRespository
     {
-         Task<IEnumerable<Product>> GetAllAsync();
-         Task<Product?> GetByIdAsync(Guid id);
-         Task CreateAsync(Product? product);
-         Task UpdateAsync(Product? product);
-         Task DeleteAsync(Guid id);
+         Task<IEnumerable<ProductEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+         Task<ProductEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+         Task CreateAsync(ProductEntity? product, CancellationToken cancellationToken = default);
+         Task UpdateAsync(ProductEntity? product, CancellationToken cancellationToken = default);
+         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

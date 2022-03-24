@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MinAPIDemo.Data;
-using MinAPIDemo.Models;
 using MinAPIDemo.Models.Domain;
 
 namespace MinAPIDemo.Repositories
@@ -10,52 +9,51 @@ namespace MinAPIDemo.Repositories
     {
 
         private readonly IDbContextFactory<EfContext> _dbContext;
-        private readonly IMapper _mapper;
         
-        public ProductRespository(IDbContextFactory<EfContext> dbContext, IMapper mapper)
+        public ProductRespository(IDbContextFactory<EfContext> dbContext)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
+            // _mapper = mapper;
         }
 
-        public async Task CreateAsync(Product? product)
+        public async Task CreateAsync(ProductEntity? product, CancellationToken cancellationToken = default)
         {   
             if(product is not null)
             {
-                var entity = _mapper.Map<ProductEntity>(product);
+                // var entity = _mapper.Map<ProductEntity>(product);
                 await using var dbContext = _dbContext.CreateDbContext();
-                await dbContext.Products.AddAsync(entity);
-                await dbContext.SaveChangesAsync();
+                await dbContext.Products.AddAsync(product, cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<ProductEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             await using var dbContext = _dbContext.CreateDbContext();
-            var results = dbContext.Products.AsEnumerable();
-            if(results.Any()) 
-            {
-                return _mapper.Map<IEnumerable<Product>>(results);
-            }
-            return Enumerable.Empty<Product>();
+            return await dbContext.Products.ToListAsync(cancellationToken);
+            // if(results.Any()) 
+            // {
+            //     return _mapper.Map<IEnumerable<Product>>(results);
+            // }
+            // return Enumerable.Empty<Product>();
         }
         
-        public async Task<Product?> GetByIdAsync(Guid id)
+        public async Task<ProductEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             await using var dbContext = _dbContext.CreateDbContext();
-            var result = await dbContext.Products.AsQueryable()
-                .FirstOrDefaultAsync(p => p.Id == id.ToString());
-            return _mapper.Map<Product>(result);
+            return await dbContext.Products.AsQueryable()
+                .FirstOrDefaultAsync(p => p.Id == id.ToString(), cancellationToken);
+            // return _mapper.Map<Product>(result);
         }
         
-        public async Task UpdateAsync(Product? product)
+        public async Task UpdateAsync(ProductEntity? product, CancellationToken cancellationToken = default)
         {
             if(product is not null)
             {
-                var entity = _mapper.Map<ProductEntity>(product);
+                // var entity = _mapper.Map<ProductEntity>(product);
                 await using var dbContext = _dbContext.CreateDbContext();
                 var existingProduct = await dbContext.Products.AsQueryable()
-                    .FirstOrDefaultAsync(p => p.Id == entity.Id);
+                    .FirstOrDefaultAsync(p => p.Id == product.Id, cancellationToken);
                 if(existingProduct is not null) 
                 {
                     existingProduct.Name = product.Name;
@@ -63,21 +61,21 @@ namespace MinAPIDemo.Repositories
                     existingProduct.Quantity = product.Quantity;    
 
                     dbContext.Update(existingProduct);
-                    await dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync(cancellationToken);
                 }
                 // _list[product.Id] = product;
             }        
         }
         
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             await using var dbContext = _dbContext.CreateDbContext();
             var existingProduct = await dbContext.Products.AsQueryable()
-                .FirstOrDefaultAsync(p => p.Id == id.ToString());
+                .FirstOrDefaultAsync(p => p.Id == id.ToString(), cancellationToken);
             if(existingProduct is not null) 
             {
                 dbContext.Remove(existingProduct);
-                await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
             // if(_list.ContainsKey(id)) 
             // {

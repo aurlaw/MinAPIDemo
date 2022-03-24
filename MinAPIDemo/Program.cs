@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MinAPIDemo;
 using MinAPIDemo.Common;
 using MinAPIDemo.Data;
 using MinAPIDemo.Models;
+using MinAPIDemo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,10 @@ builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Minimal API", Version = "v1" });    
 });
 // builder.Services.AddJwtAuthService(builder.Configuration);
+builder.Services.AddSingleton<IProductRespository, ProductRespository>();
+
+builder.Services.AddMediatR(typeof(Product).Assembly);
+
 builder.Services.AddEndpointDefinitions(typeof(Product));
 
 builder.Services.AddCors(options =>
